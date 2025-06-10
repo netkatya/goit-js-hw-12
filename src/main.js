@@ -52,6 +52,7 @@ form.addEventListener("submit", async event => {
         message: 'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight'
       });
+      hideLoadButton();
     } else {
       createGallery(hits);
       showLoadButton();
@@ -82,6 +83,15 @@ loadButton.addEventListener("click", async () => {
     const data = await getImagesByQuery(currentQuery, currentPage, perPage);
     createGallery(data.hits)
 
+    const galleryItem = document.querySelector(".gallery-item");
+    if (galleryItem) {
+      const itemHeight = galleryItem.getBoundingClientRect().height;
+      window.scrollBy({
+        top: itemHeight * 2,
+        behavior: "smooth"
+      })
+    }
+
     const totalPages = Math.ceil(data.totalHits / perPage);
     if (currentPage >= totalPages) {
       hideLoadButton();
@@ -101,3 +111,5 @@ loadButton.addEventListener("click", async () => {
     hideLoader();
   }
 })
+
+
